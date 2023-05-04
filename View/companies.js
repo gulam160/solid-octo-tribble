@@ -13,9 +13,10 @@ companiesRouter.get("/companyAds", async (req, res) => {
         { headline: new RegExp(q, "i") },
         { description: new RegExp(q, "i") },
       ];
-      let response = await CompanyModel.aggregate([
-        { $match: { $or: pipeline } },
-      ]);
+      let response = await CompanyModel.aggregate(
+        [{ $match: { $or: pipeline } }],
+        { maxTimeMS: 30000 }
+      );
       res.status(200).send(response);
     } else {
       res.status(401).send({ msg: "Request needs a query" });
